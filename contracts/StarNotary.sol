@@ -14,6 +14,8 @@ contract StarNotary is ERC721 {
     // Implement Task 1 Add a name and symbol properties
     // name: Is a short name to your token
     // symbol: Is a short string like 'USD' -> 'American Dollar'
+    string public constant name = "MyFirstToken";
+    string public constant symbol = "MFT";
     
 
     // mapping the Star with the Owner Address
@@ -57,14 +59,21 @@ contract StarNotary is ERC721 {
     // Implement Task 1 lookUptokenIdToStarInfo
     function lookUptokenIdToStarInfo (uint _tokenId) public view returns (string memory) {
         //1. You should return the Star saved in tokenIdToStarInfo mapping
+        //console.log(tokenIdToStarInfo[_tokenId]._name);
+        return tokenIdToStarInfo[_tokenId].name;
     }
 
     // Implement Task 1 Exchange Stars function
     function exchangeStars(uint256 _tokenId1, uint256 _tokenId2) public {
         //1. Passing to star tokenId you will need to check if the owner of _tokenId1 or _tokenId2 is the sender
+        require(ownerOf(_tokenId1) == msg.sender || ownerOf(_tokenId2) == msg.sender, "Sender is not have tokens");
         //2. You don't have to check for the price of the token (star)
         //3. Get the owner of the two tokens (ownerOf(_tokenId1), ownerOf(_tokenId1)
+        address owner1Address = ownerOf(_tokenId1);
+        address owner2Address = ownerOf(_tokenId2);
         //4. Use _transferFrom function to exchange the tokens.
+        _transferFrom(owner1Address, owner2Address, _tokenId1);
+        _transferFrom(owner2Address, owner1Address, _tokenId2);
     }
 
     // Implement Task 1 Transfer Stars
